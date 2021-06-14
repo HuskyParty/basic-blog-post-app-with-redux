@@ -1,6 +1,9 @@
 import { React, useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { createPost } from "../actions/postActions";
 
-const Postform = () => {
+const PostForm = (props) => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
 
@@ -11,16 +14,9 @@ const Postform = () => {
             title: title,
             body: body,
         };
-
-        fetch("https://jsonplaceholder.typicode.com/posts", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify(post),
-        })
-            .then((res) => res.json())
-            .then((data) => console.log(data));
+        setTitle("");
+        setBody("");
+        props.createPost(post);
     };
     return (
         <div>
@@ -55,4 +51,8 @@ const Postform = () => {
     );
 };
 
-export default Postform;
+PostForm.propTypes = {
+    createPost: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createPost })(PostForm);
